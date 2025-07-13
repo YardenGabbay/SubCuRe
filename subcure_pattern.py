@@ -64,10 +64,14 @@ def choose_random_key(weights_optimization_method, random_choice, global_key_val
         return random.choices(keys, weights=normalized_weights, k=1)[0]
 
 
-def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx):
+def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx, model_type):
+    if model_type=='linear':
+        ate_update_class = ATEUpdateLinear
+    else:
+        ate_update_class = ATEUpdateLogistic
     global_used_combinations = set()
     global_key_value_score = dict()
-    ate_update_obj = ATEUpdateLinear(df[confounders], df[treatment], df[outcome])
+    ate_update_obj = ate_update_class(df[confounders], df[treatment], df[outcome])
     df_ate = ate_update_obj.get_original_ate()
 
     print(f"df ATE: {df_ate}")
@@ -85,7 +89,7 @@ def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weigh
 
     for walk_idx, random_choice in enumerate(random_choices):
         print(f"\nwalk idx: {walk_idx}")
-        ate_update_obj = ATEUpdateLinear(df[confounders], df[treatment], df[outcome])
+        ate_update_obj = ate_update_class(df[confounders], df[treatment], df[outcome])
 
         combo_to_remove = []
         key_value = []
@@ -171,9 +175,11 @@ def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weigh
     print(f"Min Diff: {min_diff}")
     print(f"Best Diff: {best_diff}")
 
-def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx):
+def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx, model_type):
     start_time = time.time()
     df = pd.read_csv(csv_name)
+    if len(df) > 100000:
+        df = df.sample(frac=0.1).reset_index()
     valid_subgroups = []
     unique_combinations = df[list(attributes_for_random_walks)].drop_duplicates()
 
@@ -182,25 +188,10 @@ def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome,
         valid_subgroups.append(subgroup_dict)
     cols = list(set(attributes_for_random_walks+confounders+[treatment, outcome]))
     df = df[cols]
-    k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx)
+    k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx, model_type)
     elapsed_time = time.time() - start_time
     print(f"Total execution time: {elapsed_time:.2f} seconds")
 
 
 
-if __name__ == "__main__":
-    csv_name = "twins_encoded.csv"
-    df=pd.read_csv(csv_name)
-    treatment = "treatment"
-    outcome = "outcome"
-    confounders = ["gestat10", "wt", "nprevistq", "hydra", "csex", "incervix", "dmar", "bord", "data_year", "dtotord_min"]
-    attributes_for_random_walks = [col for col in df.columns if col not in [treatment, outcome]]
     
-    desired_ate = 0
-    epsilon= 0.001
-    k=1000
-    size_threshold=0.2
-    approx=False
-    weights_optimization_method = 1 # 0- no optimization, 1- sorting, 2- real weights
-    for i in range(3):
-        main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx)
