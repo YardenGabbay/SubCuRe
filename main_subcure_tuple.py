@@ -1,0 +1,32 @@
+from clustered_top_k import ClusteredATEBaselines
+from batch_sampled_top_k import BatchSampledATEBaselines
+import pandas as pd
+
+if __name__=="__main__":
+    # params
+    csv_name = ""
+    treatment = ""
+    outcome = ""
+    confounders = []
+    attributes_for_random_walks = []
+    desired_ate = None
+    epsilon= None
+    approx = False
+
+    # default params - can be changed
+    model_type='linear'
+    influence_recalc_interval=10
+    
+    df = pd.read_csv(csv_name)
+    if len(df) > 100000:
+        batch_size=400
+        sample_ratio=0.1
+        k_neighbors=100
+        sampled_baselines = BatchSampledATEBaselines(df[confounders], df[treatment], df[outcome], model_type=model_type, sample_ratio=sample_ratio, batch_size=batch_size)
+        sampled_topk_results = sampled_baselines.batch_sampled_top_k_plus(target_ate=desired_ate, epsilon=epsilon, k_neighbors=k_neighbors, approx=approx, influence_recalc_interval=influence_recalc_interval)
+    else:
+        sampled_baselines = ClusteredATEBaselines(df[confounders], df[treatment], df[outcome], model_type=model_type)
+        sampled_topk_results = sampled_baselines.top_k_plus(target_ate=desired_ate, epsilon=epsilon, approx=approx, influence_recalc_interval=influence_recalc_interval)
+
+        
+
