@@ -8,7 +8,6 @@ if __name__=="__main__":
     treatment = ""
     outcome = ""
     confounders = []
-    attributes_for_random_walks = []
     desired_ate = None
     epsilon= None
     approx = False
