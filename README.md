@@ -41,7 +41,7 @@ This repository contains the implementation of the causal data repair pipeline S
    For Yarden: give the command of how to reproduce experiments.
 
 4. **Inspect results**  
-   Output logs and results will be saved in the `experiments/logs` directory.
+   Output logs will be saved in the `experiments/logs` directory when setting the parameter `verbose=True` for the algorithm. The results of tuple removed can be directly observed by printing the variables returned by the algorithms. 
 
 ## Requirements
 
