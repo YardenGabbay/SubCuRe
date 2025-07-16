@@ -84,7 +84,7 @@ def choose_random_key(weights_optimization_method, random_choice, global_key_val
         return random.choices(keys, weights=normalized_weights, k=1)[0]
 
 
-def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx):
+def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon):
     global_used_combinations = set()
     global_key_value_score = dict()
     df_ate = calc_ate(treatment,outcome,confounders,df)
@@ -185,7 +185,7 @@ def k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weigh
     print(f"Min Diff: {min_diff}")
     print(f"Best Diff: {best_diff}")
 
-def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx, model_type):
+def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon):
     start_time = time.time()
     df = pd.read_csv(csv_name)
     if len(df) > 100000:
@@ -198,6 +198,6 @@ def main(csv_name, attributes_for_random_walks, confounders, treatment, outcome,
         valid_subgroups.append(subgroup_dict)
     cols = list(set(attributes_for_random_walks+confounders+[treatment, outcome]))
     df = df[cols]
-    k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon, approx, model_type)
+    k_random_walks(k, treatment, outcome, df, desired_ate, size_threshold, weights_optimization_method, confounders, valid_subgroups, epsilon)
     elapsed_time = time.time() - start_time
     print(f"Total execution time: {elapsed_time:.2f} seconds")
