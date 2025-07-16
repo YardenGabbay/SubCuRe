@@ -5,7 +5,6 @@ if __name__=="__main__":
     treatment = ""
     outcome = ""
     confounders = []
-    attributes_for_random_walks = []
     desired_ate = None
     epsilon= None
 
@@ -15,5 +14,6 @@ if __name__=="__main__":
     approx=False
     weights_optimization_method = 1 # 0- no optimization, 1- sorting, 2- real weights
     model_type = "linear"
-
+    df = pd.read_csv(csv_name)
+    attributes_for_random_walks = [c for c in df.columns if c not in [treatment, outcome]]
     main(csv_name, attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx, model_type)
