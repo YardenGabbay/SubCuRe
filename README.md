@@ -5,10 +5,10 @@ This repository contains the implementation of the causal data repair pipeline S
 ## File Structure
 
 - `datasets/`: All datasets used in experiments
-    - Description for German Credit
-    - Description for Twins
-    - Description for StackOverFlow
-    - Description for ACS
+    - German Credit
+    - Twins
+    - StackOverFlow
+    - ACS
 - `experiments/`: Experimental scripts (e.g., noisy tuples experiments)
     - Description for all the experimental codes
 - `ATE_update.py`: Compute and update average - treatment effect (ATE)
