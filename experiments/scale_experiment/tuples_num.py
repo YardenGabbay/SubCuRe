@@ -33,31 +33,16 @@ if __name__ == "__main__":
     # subcure-tuple
     influence_recalc_interval=10
 
-    num_repeats=3
     frac_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 
     print("======== subcure-pattern =======")
-    
-    timing_results = defaultdict(list)
-    for repeat in range(1, num_repeats + 1):
-        print(f"\n-- Repetition {repeat}/{num_repeats} --")
-        for frac in frac_list:
-            curr_df = pd.read_csv(csv_name).sample(frac=frac)
-            curr_df.to_csv(f"{frac}_{csv_name}")
-            orig_ate = ATEUpdateLinear(curr_df[confounders], curr_df[treatment], curr_df[outcome]).get_original_ate()
-            desired_ate = orig_ate+ate_offset
-            print(f"\n--- Testing with frac: {frac}---")
-
-            start_time = time.time()
-            main_subcure_pattern(f"{frac}_{csv_name}", attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx, model_type)
-            elapsed_time = time.time() - start_time
-
-            timing_results[frac].append(elapsed_time)
-
-    print("\n-- Average Execution Times --")
     for frac in frac_list:
-        avg_time = np.mean(timing_results[frac])
-        print(f"frac {frac}: {avg_time:.2f} seconds")
+        curr_df = pd.read_csv(csv_name).sample(frac=frac)
+        curr_df.to_csv(f"{frac}_{csv_name}")
+        orig_ate = ATEUpdateLinear(curr_df[confounders], curr_df[treatment], curr_df[outcome]).get_original_ate()
+        desired_ate = orig_ate+ate_offset
+        print(f"\n--- Testing with frac: {frac}---")
+        main_subcure_pattern(f"{frac}_{csv_name}", attributes_for_random_walks, confounders, treatment, outcome, desired_ate, k, size_threshold, weights_optimization_method, epsilon, approx, model_type)
 
 
     print("======== Naive-greedy =======")
