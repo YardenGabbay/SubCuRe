@@ -10,9 +10,9 @@ This repository contains the implementation of the causal data repair pipeline S
     - StackOverFlow
     - ACS
 - `experiments/`: Experimental scripts
-    - `noisy_tuples_experiment.py`: creates a synthetic data of 10k tuples, inserting 400-1600 noisy tuples and examine subcure results
-    - `ablation_study/`: subcure algorithms without incremental updates optimization
-    - `scale_experiment/`: effect of tuples number, confounders number, and ATE difference on runtime
+    - `noisy_tuples_experiment.py`: Creates a synthetic data of 10k tuples, inserting 400-1600 noisy tuples and examine subcure results
+    - `ablation_study/`: Subcure algorithms without incremental updates optimization
+    - `scale_experiment/`: Effect of tuples number, confounders number, and ATE difference on runtime
       
 - `ATE_update.py`: Compute and update average - treatment effect (ATE)
 - `batch_sampled_top_k.py`: Randomly sampling-based naive greedy and SubCuRe tuple-removal method with batch removal
@@ -42,7 +42,7 @@ This repository contains the implementation of the causal data repair pipeline S
 
 2. **Run an experiment**  
    - noisy_tuples_experiment: run the command in the control pannel.
-   - ablation_study: modify the parameters in the python script and run the command in the control pannel (main_subcure_tuple.py / main_subcure_pattern.py)
+   - ablation_study: modify the parameters in the python script and run the command in the control pannel (main_subcure_tuple.py / main_subcure_pattern.py).
    - scale_experiment: modify the parameters in the python script and run the command in the control pannel (confounders_num.py / tuples_num.py / target_ate.py). Every experiment includes subcure_pattern + subcure_tuple + naive_greedy execution.
 
 4. **Inspect results**  
