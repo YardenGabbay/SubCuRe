@@ -61,8 +61,3 @@ This repository contains the implementation of the causal data repair pipeline S
 ```bash
 pip install numpy pandas scikit-learn scipy matplotlib
 ```
-
-## Contact
-
-For questions or bug reports, please contact:  
-Brit Youngmann – [brity@technion.ac.il]  
