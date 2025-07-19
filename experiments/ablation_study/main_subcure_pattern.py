@@ -1,4 +1,5 @@
 from subcure_pattern import main
+import pandas as pd
 
 if __name__=="__main__":
     csv_name = ""
